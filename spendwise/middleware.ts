@@ -5,6 +5,8 @@ import {
   
   const isProtectedRoute = createRouteMatcher([
     '/dashboard',
+    '/dashboard/budgets'
+    
   ]);
   
   export default clerkMiddleware((auth, req) => {
