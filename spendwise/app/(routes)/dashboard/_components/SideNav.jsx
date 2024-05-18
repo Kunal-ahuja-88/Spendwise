@@ -5,6 +5,7 @@ import { LayoutGrid, PiggyBank, ReceiptText,ShieldCheck } from 'lucide-react'
 import { UserButton } from '@clerk/nextjs'
 import { usePathname } from 'next/navigation'
 import Link from 'next/link';
+
 function SideNav() {
     const menuList = [
         {
@@ -37,7 +38,7 @@ function SideNav() {
 
     useEffect(()=> {
      console.log(path)
-    },[path])
+    },[])
 
   return (
     <div className='h-screen p-5 border shadow-sm '>
@@ -67,3 +68,4 @@ function SideNav() {
 }
 
 export default SideNav
+
