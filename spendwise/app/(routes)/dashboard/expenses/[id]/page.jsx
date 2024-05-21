@@ -7,9 +7,9 @@ import { useUser } from '@clerk/nextjs';
 import BudgetItem from '../../budgets/_components/BudgetItem';
 import AddExpense from '../_components/AddExpense';
 import ExpenseListTable from '../_components/ExpenseListTable';
-import { Trash } from 'lucide-react';
+import { PenBox, Trash } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import{
+import {
     AlertDialog,
     AlertDialogAction,
     AlertDialogCancel,
@@ -21,13 +21,14 @@ import{
     AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
 import { toast } from 'sonner';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
+import EditBudget from '../EditBudget';
 
 function ExpensesScreen({ params }) {
     const { user } = useUser();
     const [budgetInfo, setBudgetInfo] = useState()
     const [expensesList, setExpensesList] = useState([])
-    const route=useRouter();
+    const route = useRouter();
     useEffect(() => {
         user && getBudgetInfo();
 
@@ -67,26 +68,31 @@ function ExpensesScreen({ params }) {
     /**
      * Used to delete budget
      */
-  
-    const deleteBudget=async()=>{
-       
-        const deleteExpenseResult=await db.delete(Expenses)
-        .where(eq(Expenses.budgetId,params.id))
-        .returning();
 
-        if(deleteExpenseResult) {
-            const result = await db.delete(Budgets)
-            .where(eq(Budgets.id,params.id))
+    const deleteBudget = async () => {
+
+        const deleteExpenseResult = await db.delete(Expenses)
+            .where(eq(Expenses.budgetId, params.id))
             .returning();
+
+        if (deleteExpenseResult) {
+            const result = await db.delete(Budgets)
+                .where(eq(Budgets.id, params.id))
+                .returning();
         }
-       toast('Expense Deleted')
-       route.replace('/dashboard/budgets');
+        toast('Expense Deleted')
+        route.replace('/dashboard/budgets');
     }
 
     return (
         <div className='p-10'>
             <h2 className='text-2xl font-bold flex justify-between items-center'>My Expenses
 
+                <div className='flex gap-2 items-center'>
+                
+                <EditBudget 
+                budgetInfo={budgetInfo} 
+                refreshData={()=>getBudgetInfo()}/>
                 
                 <AlertDialog>
                     <AlertDialogTrigger asChild>
@@ -105,11 +111,11 @@ function ExpensesScreen({ params }) {
                         </AlertDialogHeader>
                         <AlertDialogFooter>
                             <AlertDialogCancel>Cancel</AlertDialogCancel>
-                            <AlertDialogAction onClick={()=>deleteBudget()}>Continue</AlertDialogAction>
+                            <AlertDialogAction onClick={() => deleteBudget()}>Continue</AlertDialogAction>
                         </AlertDialogFooter>
                     </AlertDialogContent>
                 </AlertDialog>
-
+                </div>
             </h2>
             <div className='grid grid-cols-1 md:grid-cols-2 mt-6'>
                 {budgetInfo ? <BudgetItem
