@@ -1,5 +1,5 @@
 "use client"
-import React , {useState}from 'react'
+import React, { useState } from 'react'
 import {
   Dialog,
   DialogContent,
@@ -14,88 +14,87 @@ import { Input } from '@/components/ui/input'
 import { Budgets } from '@/utils/schema'
 import { useUser } from '@clerk/nextjs'
 import { db } from '@/utils/dbConfig'
-import { Toaster } from '@/components/ui/sonner'
 import { toast } from 'sonner'
 
-function CreateBudget({refreshData}) {
+function CreateBudget() {
 
-  const[emojiIcon,setEmojiIcon]=useState('Add Emoji');
-  const[openEmojiPicker,setOpenEmojiPicker]=useState(false);
+  const [emojiIcon, setEmojiIcon] = useState('Add Emoji');
+  const [openEmojiPicker, setOpenEmojiPicker] = useState(false);
 
-  const[name,setName]=useState();
-  const[amount,setAmount]=useState();
+  const [name, setName] = useState();
+  const [amount, setAmount] = useState();
 
-  const {user}=useUser()
+  const { user } = useUser()
 
-  const onCreateBudget = async()=> {
+  const onCreateBudget = async () => {
     const result = await db.insert(Budgets)
-    .values({
-      name:name,
-      amount:amount,
-      createdBy:user?.primaryEmailAddress?.emailAddress,
-      icon:emojiIcon
-    }).returning({insertedId:Budgets.id})
+      .values({
+        name: name,
+        amount: amount,
+        createdBy: user?.primaryEmailAddress?.emailAddress,
+        icon: emojiIcon
+      }).returning({ insertedId: Budgets.id })
 
-    if(result) {
-      refreshData()
+    if (result) {
+
       toast('New Budget Created')
     }
   }
 
   return (
     <div>
-       <Dialog>
-  <DialogTrigger asChild>
-   <div className='bg-slate-100 p-10 rounded-md items-center flex flex-col border-2
+      <Dialog>
+        <DialogTrigger asChild>
+          <div className='bg-slate-100 p-10 rounded-md items-center flex flex-col border-2
        border-dashed cursor-pointer hover:shoadow-md'>
-       <h2 className='text-3xl'>+</h2>
-       <h2>CreateBudget</h2>
-       </div>
-       </DialogTrigger>
-  <DialogContent>
-    <DialogHeader>
-      <DialogTitle>Create New Budget</DialogTitle>
-      <DialogDescription>
-      <div>
-      <Button variant ="outline"
-      onClick = {()=>setOpenEmojiPicker(!openEmojiPicker)}>
-      {emojiIcon}</Button>
-        <div className='absolute z-20'>
-          <EmojiPicker open={openEmojiPicker}
-          onEmojiClick={(e)=>{
-            setEmojiIcon(e.emoji)
-            setOpenEmojiPicker(false)
-          }}
-          />
-        </div>
-        <div className='mt-2'>
-          <h2 className='text-black font-medium my-1'>Budget Name</h2>
-          <Input 
-          placeholder="e.g Electricity bill"
-            onChange = {(e)=>setName(e.target.value)}
-            className='text-gray-700' />
-          
-        </div>
-        <div className='mt-2'>
-          <h2 className='text-black font-medium my-1'>Budget Amount</h2>
-          <Input 
-          type="number"
-          placeholder="e.g Rs.5000"
-          onChange = {(e)=>setAmount(e.target.value)}
-          className='text-gray-700'
-          />
-          
-        </div>
-        <Button
-          onClick={onCreateBudget}
-        disabled={!(name&&amount)}
-         className='mt-5 w-full'>Create Budget</Button>
-        </div>
-      </DialogDescription>
-    </DialogHeader>
-  </DialogContent>
-</Dialog>
+            <h2 className='text-3xl'>+</h2>
+            <h2>CreateBudget</h2>
+          </div>
+        </DialogTrigger>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Create New Budget</DialogTitle>
+            <DialogDescription>
+              <div>
+                <Button variant="outline"
+                  onClick={() => setOpenEmojiPicker(!openEmojiPicker)}>
+                  {emojiIcon}</Button>
+                <div className='absolute z-20'>
+                  <EmojiPicker open={openEmojiPicker}
+                    onEmojiClick={(e) => {
+                      setEmojiIcon(e.emoji)
+                      setOpenEmojiPicker(false)
+                    }}
+                  />
+                </div>
+                <div className='mt-2'>
+                  <h2 className='text-black font-medium my-1'>Budget Name</h2>
+                  <Input
+                    placeholder="e.g Electricity bill"
+                    onChange={(e) => setName(e.target.value)}
+                    className='text-gray-700' />
 
+                </div>
+                <div className='mt-2'>
+                  <h2 className='text-black font-medium my-1'>Budget Amount</h2>
+                  <Input
+                    type="number"
+                    placeholder="e.g Rs.5000"
+                    onChange={(e) => setAmount(e.target.value)}
+                    className='text-gray-700'
+                  />
+
+                </div>
+                <Button
+                  onClick={onCreateBudget}
+                  disabled={!(name && amount)}
+                  className='mt-5 w-full'>Create Budget</Button>
+              </div>
+            </DialogDescription>
+          </DialogHeader>
+        </DialogContent>
+      </Dialog>
+    
     </div>
   )
 }

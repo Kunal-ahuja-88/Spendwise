@@ -22,7 +22,7 @@ import {
 } from "@/components/ui/alert-dialog"
 import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
-import EditBudget from '../EditBudget';
+import EditBudget from '../_components/EditBudget';
 
 function ExpensesScreen({ params }) {
     const { user } = useUser();
@@ -129,7 +129,7 @@ function ExpensesScreen({ params }) {
                 />
             </div>
             <div className='mt-4'>
-                <h2 className='font-bold text-lg'>Latest Expenses</h2>
+              
                 <ExpenseListTable expensesList={expensesList}
                     refreshData={() => getBudgetInfo()}
                 />
