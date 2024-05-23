@@ -29,7 +29,7 @@ function DashboardLayout({ children }) {
   }
 
   return (
-    <SignedIn >
+    
     <div>
       <div className='fixed md:w-64 md-block '>
         <SideNav />
@@ -39,7 +39,7 @@ function DashboardLayout({ children }) {
         {children}
       </div>
     </div>
-</SignedIn>
+
   )
 }
 

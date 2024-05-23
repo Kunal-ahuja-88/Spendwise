@@ -8,7 +8,7 @@ import Link from 'next/link'
 function Header() {
   const { user, isSignedIn } = useUser();
   return (
-    <div className='p-5 flex justify-between items-center shadow-md'>
+    <div className='p-5 boder-b shadow-sm'>
       <div className='flex items-center justify-between'>
         <Image src={'./logo.svg'}
           alt='logo'
@@ -18,9 +18,11 @@ function Header() {
 
         {isSignedIn ?
           <div className='flex items-center gap-5'>
-          <Link href = {'/dashboard'}>
-          <Button variant="outline "> Dashboard</Button>
+          <Link href={'/dashboard'}>
+          <Button variant="outline" className='font-bold text-0.5xl text-primary'> Dashboard</Button>
           </Link>
+         
+        
             <UserButton />
           </div> :
           <SignInButton>
